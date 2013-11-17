@@ -1,9 +1,9 @@
 var async = require("async"),
     redis = require("redis"),
-    client = redis.createClient();
+    client = redis.createClient(6379,'218.24.198.133');
 
 exports.index = function (req, res) {
-    client.keys("K_T*", function (err, data) {
+    client.keys("VOD_PER*", function (err, data) {
         async.map(data, function (t, cb) {
             client.hgetall(t, function (err, d) {
                 cb(err, d);
