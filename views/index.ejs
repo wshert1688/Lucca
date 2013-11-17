@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+    <title>Starter Template for Bootstrap</title>
+    <link href="http://v3.bootcss.com/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/examples/starter-template/starter-template.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+    <h1>LIAONING-TV</h1>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped responsive-utilities">
+            <thead>
+            <tr>
+                <th></th>
+                <th>
+                    状态
+                </th>
+                <th>
+                    上传状态
+                </th>
+                <th>
+                    1080P
+                    <small>1920*1080</small>
+                </th>
+                <th>
+                    720P
+                    <small>1280*720</small>
+                </th>
+                <th>
+                    480P
+                    <small>720*480</small>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i = 0;i < d.length;i++){
+                var k = d[i];
+                var t = item[i];
+                var t1920 = t["1920x1080"];
+                var t720 = t["1280x720"];
+                var t480 = t["720x480"];
+            %>
+            <tr>
+                <th><code><%=k %></code></th>
+                <th><code></code></th>
+                <th><code></code></th>
+                <td class="is-hidden">
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="<%=t1920%>" aria-valuemin="0"
+                             aria-valuemax="100"
+                             style="width:<%=t1920%>%">
+                            <span class="sr-only"><%=t1920%>% Complete</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="is-hidden">
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="<%=t720%>" aria-valuemin="0"
+                             aria-valuemax="100"
+                             style="width: <%=t720%>%">
+                            <span class="sr-only"><%=t720%>% Complete</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="is-hidden">
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="<%=t480%>" aria-valuemin="0"
+                             aria-valuemax="100"
+                             style="width: <%=t720%>%">
+                            <span class="sr-only"><%=t720%>% Complete</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="../../dist/js/bootstrap.min.js"></script>
+</body>
+</html>
