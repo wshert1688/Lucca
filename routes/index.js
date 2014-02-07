@@ -23,7 +23,7 @@ exports.send = function (req, res) {
     var url = req.query.u;
     var target = comb.date.format(new Date(), "yyyyMMddhhmmss") + random(4);
 
-    client.publish("task", JSON.stringify({target: target, path: "/data/", url: url}));
+    client.publish("task", JSON.stringify({target: target, path: "/vod/", url: url}));
     res.send({target: target, url: url});
 }
 
