@@ -4,7 +4,9 @@ var redis = require("redis"),
     request = require('request'),
     fs = require('fs'),
     comb = require("comb"),
-    client = redis.createClient(), channel = redis.createClient();
+    client = redis.createClient(),
+    exec = require('child_process').exec,
+    channel = redis.createClient(), mkdirp = require('mkdirp');
 
 var K_T_PER = "VOD_PER_";
 var K_T_STAT = "VOD_STAT_";
@@ -22,7 +24,7 @@ function print() {
 function main() {
     console.log("liaoningtv-convert is start");
     channel.on("message", function (channel, data) {
-
+        console.log(data);
         var task = JSON.parse(data);
         if (channel == "task" && !task) {
             return;
@@ -36,7 +38,7 @@ function main() {
 
 function downloadFile(task) {
     var strTarget = comb.date.format(new Date(), "yyyyMMddhhmmss");
-    strTarget = sformat("%s%s.mp4", [strTarget, random(4)])
+    strTarget = sformat("/vod/%s%s.mp4", [strTarget, random(4)])
     var r = fs.createWriteStream(strTarget);
     r.on('close', function () {
         startConvert(strTarget, task.target, task.path);
@@ -60,11 +62,18 @@ function startConvert(path, target, targetPath) {
             convert('720x480', path, target, targetPath, cb);
         }
     ], function (err, results) {
-
+        exec("rm -rf " + path, function (error, stdout, stderr) {
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+        });
     })
 }
 
 function convert(size, path, target, targetPath, cb) {
+    mkdirp(targetPath, function (err) {
+        if (err) console.error(err)
+    });
     var targetFilename = sformat("%s%s%s.mp4", [targetPath, target, size])
     setStat(target, size, 0);
     var proc = new ffmpeg({ source: path, timeout: 9999 })
@@ -75,10 +84,11 @@ function convert(size, path, target, targetPath, cb) {
         .withAudioBitrate('64k')
         .withAudioCodec('libmp3lame')
         .onProgress(function (progress) {
-            setPercent(target, size, progress.percent)
+            setPercent(target, size, progress.percent.toFixed(2))
         })
         .toFormat('mp4')
         .saveToFile(targetFilename, function (stdout, stderr) {
+            setPercent(target, size, 100)
             setStat(target, size, 1);
             cb();
         });

@@ -13,7 +13,6 @@ exports.index = function (req, res) {
                 cb(err, d);
             });
         }, function (err, results) {
-            console.log(results);
             res.render('index', { title: 'LIAONINGTV', d: data, item: results });
         });
     })
@@ -21,9 +20,10 @@ exports.index = function (req, res) {
 
 exports.send = function (req, res) {
     var url = req.query.u;
-    var target = comb.date.format(new Date(), "yyyyMMddhhmmss") + random(4);
-
-    client.publish("task", JSON.stringify({target: target, path: "/vod/", url: url}));
+    var date = new Date();
+    var target = comb.date.format(date, "yyyyMMddhhmmss") + random(4);
+    var path = "/data/"+comb.date.format(date, "yyyy/MM/dd/hh/");
+    client.publish("task", JSON.stringify({target: target, path: path, url: url}));
     res.send({target: target, url: url});
 }
 
