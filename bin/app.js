@@ -77,8 +77,9 @@ function convert(size, path, target, targetPath, cb) {
     var targetFilename = sformat("%s%s%s.mp4", [targetPath, target, size])
     setStat(target, size, 0);
     var proc = new ffmpeg({ source: path, timeout: 9999 })
-        .withVideoBitrate(512)
+        .withVideoBitrate(1024)
         .withVideoCodec('libx264')
+        .withAspect('16:9')
         .withSize(size)
         .withFps(24)
         .withAudioBitrate('64k')
